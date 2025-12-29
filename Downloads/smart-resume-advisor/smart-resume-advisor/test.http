@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/analyze
+Content-Type: application/json
+
+{
+  "resumeText": "I know Java, Spring Boot, REST APIs",
+  "jobText": "Looking for a Java Spring Boot developer with Docker"
+}
