@@ -49,8 +49,12 @@ Smart Resume Advisor is a full-stack application that analyzes resumes against j
 cd smart-resume-advisor
 ./mvnw spring-boot:run
 
+---
+
 ###Backend runs on:
 http://localhost:8080
+
+---
 
 ###Frontend
 cd frontend/smart-resume-advisor-frontend
