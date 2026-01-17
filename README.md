@@ -60,3 +60,8 @@ http://localhost:8080
 cd frontend/smart-resume-advisor-frontend
 npm install
 npm run dev
+
+---
+
+###Frontend runs on:
+http://localhost:5173
