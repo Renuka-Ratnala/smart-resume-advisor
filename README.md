@@ -1,20 +1,50 @@
 # Smart Resume Advisor
 
-Java-based application to analyze resumes against job requirements.
+Smart Resume Advisor is a full-stack application that analyzes resumes against job descriptions and provides a match score along with matched and missing skills.
 
-## Overview
-This project focuses on evaluating resumes by matching keywords from job descriptions
-and ranking them based on relevance.
+---
 
-## Status
-Work in progress. Core logic under development.
+## 🚀 Features
 
-## Tech Stack
-- Java
-- Object-Oriented Programming
-- Basic Data Structures
+- Resume and job description comparison
+- Skill extraction and normalization
+- Match score calculation
+- Categorized matched and missing skills
+- Simple React-based UI for interaction
+- REST API backend built with Spring Boot
 
-## Planned Features
-- Keyword extraction
-- Resume scoring using HashMap
-- Ranking based on relevance
+---
+
+## 🛠 Tech Stack
+
+### Backend
+- Java 17
+- Spring Boot
+- REST APIs
+- JPA / Hibernate
+- H2 Database (can be switched to MySQL)
+
+### Frontend
+- React
+- Vite
+- Axios
+- Basic CSS
+
+---
+
+## ⚙️ How It Works
+
+1. User enters resume text and job description
+2. Backend extracts skills using keyword matching
+3. Skills are normalized and compared
+4. A match score is calculated
+5. Results are displayed in the UI
+
+---
+
+## ▶️ How to Run Locally
+
+### Backend
+```bash
+cd smart-resume-advisor
+./mvnw spring-boot:run
