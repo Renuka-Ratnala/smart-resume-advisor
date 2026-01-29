@@ -1,0 +1,66 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+.app {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+textarea {
+  height: 120px;
+  padding: 10px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+button {
+  padding: 10px;
+  font-size: 16px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #999;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+
+.result {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+.skills {
+  display: flex;
+  gap: 40px;
+  margin-top: 15px;
+}
+
+.good {
+  color: green;
+}
+
+.bad {
+  color: red;
+}
