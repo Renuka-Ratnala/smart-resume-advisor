@@ -46,20 +46,26 @@ public class ResumeAnalyzerService {
         Set<String> missingSkills = new HashSet<>();
 
         int totalScore = 0;
-        int maxScore = skills.stream()
-                .mapToInt(Skill::getWeight)
-                .sum();
+        int maxScore = 0;
 
         for (Skill skill : skills) {
+
             String skillName = skill.getName().toLowerCase();
+
+            // Only consider skills present in Job Description
+            boolean jobHas =
+                    SkillNormalizer.skillPresent(jobText, skillName);
+
+            if (!jobHas) {
+                continue;
+            }
+
+            maxScore += skill.getWeight();
 
             boolean resumeHas =
                     SkillNormalizer.skillPresent(resumeText, skillName);
 
-            boolean jobHas =
-                    SkillNormalizer.skillPresent(jobText, skillName);
-
-            if (resumeHas && jobHas) {
+            if (resumeHas) {
                 matchedSkills.add(skillName);
                 totalScore += skill.getWeight();
             } else {
@@ -67,14 +73,15 @@ public class ResumeAnalyzerService {
             }
         }
 
-        int score = maxScore == 0 ? 0 : (totalScore * 100) / maxScore;
+        int score = maxScore == 0
+                ? 0
+                : (totalScore * 100) / maxScore;
 
         String verdict =
-                score >= 70 ? "Strong match" :
-                        score >= 40 ? "Average match" :
-                                "Weak match";
+                score >= 70 ? "Strong match"
+                        : score >= 40 ? "Average match"
+                        : "Weak match";
 
-        // Save to DB
         AnalysisResult result = new AnalysisResult();
         result.setResumeText(resume.getText());
         result.setJobText(jobDescription.getText());
@@ -85,7 +92,6 @@ public class ResumeAnalyzerService {
 
         analysisResultRepository.save(result);
 
-        // ✅ THIS NOW MATCHES THE DTO
         return new AnalysisResponse(
                 matchedSkills,
                 missingSkills,

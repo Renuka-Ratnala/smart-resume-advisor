@@ -21,7 +21,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://localhost:8081/api/analyze",
+        "http://localhost:8080/api/analyze",
         {
           method: "POST",
           headers: {
