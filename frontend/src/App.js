@@ -21,7 +21,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/analyze",
+        "https://smart-resume-advisor.onrender.com/api/analyze",
         {
           method: "POST",
           headers: {
