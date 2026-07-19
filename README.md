@@ -34,9 +34,19 @@ A full-stack Java application that analyzes resumes against job descriptions and
 
 ---
 
-## 📷 Screenshots
+## 📸 Screenshots
 
-(Add screenshots here)
+### Login
+![Login](assets/login.png)
+
+### Register
+![Register](assets/register.png)
+
+### Upload Resume
+![Upload](assets/upload.png)
+
+### Dashboard
+![Dashboard](assets/result.png)
 
 ---
 
