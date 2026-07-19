@@ -1,4 +1,6 @@
-
+<p align="center">
+  <img src="resume.jpeg" alt="GitHub Banner" width="100%">
+</p>
 
 # 🚀 Smart Resume Advisor
 
