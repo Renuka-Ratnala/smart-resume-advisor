@@ -19,7 +19,7 @@ function Login() {
         try {
 
             const response = await fetch(
-                 "https://smart-resume-advisor.onrender.com/api/auth/register",
+                 "https://smart-resume-advisor.onrender.com/api/auth/login",
                 {
                     method: "POST",
                     headers: {
