@@ -51,13 +51,14 @@ A full-stack Java application that analyzes resumes against job descriptions and
 ---
 
 ## 📂 Project Structure
-
-```text
-frontend/
-src/
-database/
-Dockerfile
-pom.xml
+📦 smart-resume-advisor
+┣ 📂 frontend
+┣ 📂 src
+┣ 📂 database
+┣ 📂 assets
+┣ 📄 Dockerfile
+┣ 📄 pom.xml
+┗ 📄 README.md
 ```
 
 ## ⚙ Installation
