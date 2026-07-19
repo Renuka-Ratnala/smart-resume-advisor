@@ -13,7 +13,7 @@ function Register({goToLogin}) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/api/auth/register",
+                 "https://smart-resume-advisor.onrender.com/api/auth/register",
                 {
                     method: "POST",
 
