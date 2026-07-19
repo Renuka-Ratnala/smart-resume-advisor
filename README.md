@@ -85,7 +85,7 @@ npm run dev
 
 ## 🌐 Live Demo
 
-(Add your deployed Render link here.)
+https://smart-resume-advisor-ui.onrender.com
 
 ---
 
