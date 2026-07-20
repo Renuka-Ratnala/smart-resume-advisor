@@ -1,166 +1,485 @@
+import { FaCloudUploadAlt } from "react-icons/fa";
+import CountUp from "react-countup";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import { useState } from "react";
 import "../App.css";
 
 function ResumeAnalyzer() {
-  const [resume, setResume] = useState("");
-  const [job, setJob] = useState("");
-  const [resumeFile, setResumeFile] = useState(null);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  // Upload PDF
-  const uploadResume = async () => {
-    setError("");
+    const [resume, setResume] = useState("");
+    const [job, setJob] = useState("");
+    const [resumeFile, setResumeFile] = useState(null);
+    const [fileName, setFileName] = useState("");
 
-    if (!resumeFile) {
-      setError("Please select a PDF file.");
-      return;
-    }
+    const [result, setResult] = useState(null);
 
-    const formData = new FormData();
-    formData.append("file", resumeFile);
+    const [loading, setLoading] = useState(false);
 
-    try {
-      const response = await fetch(
-        "https://smart-resume-advisor.onrender.com/api/upload",
-        {
-          method: "POST",
-          body: formData,
+    const [error, setError] = useState("");
+
+    const uploadResume = async () => {
+
+        setError("");
+
+        if (!resumeFile) {
+            setError("Please choose a PDF.");
+            return;
         }
-      );
 
-       const text = await response.text();
+        const formData = new FormData();
 
-       setResume(text);
+        formData.append("file", resumeFile);
 
-       alert("Resume uploaded successfully!");
+        try {
 
-    } catch (err) {
-      setError("File upload failed.");
-    }
-  };
+            const response = await fetch(
+                "https://smart-resume-advisor.onrender.com/api/upload",
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
 
-  // Analyze Resume
-  const analyze = async () => {
-    setError("");
-    setResult(null);
+            const text = await response.text();
 
-    if (!resume.trim() || !job.trim()) {
-      setError("Please enter both Resume and Job Description.");
-      return;
-    }
+            setResume(text);
 
-    setLoading(true);
+            alert("Resume uploaded successfully!");
 
-    try {
-      const response = await fetch(
-        "https://smart-resume-advisor.onrender.com/api/analyze",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            resumeText: resume,
-            jobText: job,
-          }),
+        } catch {
+
+            setError("File upload failed.");
+
         }
-      );
 
-      if (!response.ok) {
-        throw new Error("Backend error");
-      }
+    };
 
-      const data = await response.json();
-      setResult(data);
+    const analyze = async () => {
 
-    } catch (err) {
-      setError("Failed to connect to backend.");
-    } finally {
-      setLoading(false);
-    }
-  };
+        setError("");
 
-  return (
-    <div className="app">
-      <h1>Smart Resume Advisor</h1>
+        setResult(null);
+        console.log("Resume:", resume);
+        console.log("Job:", job);
 
-      <div className="form">
+        if (!resume.trim() || !job.trim()) {
 
-        {/* PDF Upload */}
-        <input
-          type="file"
-          accept=".pdf"
-          onChange={(e) => setResumeFile(e.target.files[0])}
-        />
+            setError("Please upload your resume and enter a job description.");
 
-        <button onClick={uploadResume}>
-          Upload Resume
-        </button>
+            return;
 
-        <textarea
-          placeholder="Paste your resume here..."
-          value={resume}
-          onChange={(e) => setResume(e.target.value)}
-        />
+        }
 
-        <textarea
-          placeholder="Paste job description here..."
-          value={job}
-          onChange={(e) => setJob(e.target.value)}
-        />
+        setLoading(true);
 
-        <button onClick={analyze} disabled={loading}>
-          {loading ? "Analyzing..." : "Analyze"}
-        </button>
+        try {
 
-        {error && <p className="error">{error}</p>}
-      </div>
+            const response = await fetch(
+                "https://smart-resume-advisor.onrender.com/api/analyze",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded",
+                    },
 
-      {result && (
-        <div className="result">
-          <h2>Result</h2>
+                    body: new URLSearchParams({
 
-          <p>
-            <strong>Score:</strong> {result.score}%
-          </p>
+                        resumeText: resume,
 
-          <p>
-            <strong>Verdict:</strong> {result.verdict}
-          </p>
+                        jobText: job,
 
-          <div className="skills">
+                    }),
 
-            <div>
-              <h3>Matched Skills</h3>
+                }
+            );
 
-              <ul>
-                {result.matchedSkills.map((skill, index) => (
-                  <li key={index} className="good">
-                    {skill}
-                  </li>
-                ))}
-              </ul>
+            if (!response.ok) {
+
+                throw new Error();
+
+            }
+
+            const data = await response.json();
+
+            setResult(data);
+
+        } catch {
+
+            setError("Unable to connect to backend.");
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    return (
+
+        <div className="dashboard">
+
+            <h1 className="title">
+
+                🚀 Smart Resume Advisor
+
+            </h1>
+
+            <div className="top-section">
+
+                <div className="left-section">
+
+                    {result ? (
+
+                        <>
+
+                            <div className="circle-box">
+
+                                <CircularProgressbar
+                                    value={result.score}
+                                    text=""
+                                    styles={buildStyles({
+                                        pathColor: "#6366F1",
+                                        trailColor: "#E5E7EB",
+                                        strokeLinecap: "round",
+                                        pathTransitionDuration: 2,
+                                    })}
+                                />
+
+                                <div className="score-text">
+
+                                    <CountUp
+                                        end={result.score}
+                                        duration={2}
+                                    />
+
+                                    %
+
+                                </div>
+
+                            </div>
+
+                            <h4 className="ats-title">
+                                🏆 ATS SCORE
+                            </h4>
+
+                            <h2 className="score-heading">
+                                Resume Match Score
+                            </h2>
+
+                            <div className="stars">
+                                ⭐⭐⭐⭐☆
+                            </div>
+
+                            <div className="verdict">
+                                {result.verdict}
+                            </div>
+
+                            <p className="score-description">
+                                Your resume matches approximately{" "}
+                                <strong>{result.score}%</strong> of the
+                                required job description.
+                            </p>
+
+                            <div className="progress-container">
+
+                                <div
+                                    className="progress-fill"
+                                    style={{ width: `${result.score}%` }}
+                                ></div>
+
+                            </div>
+
+                            <p className="progress-text">
+                                ATS Match: {result.score}%
+                            </p>
+                        </>
+
+                    ) : (
+
+                        <div className="waiting">
+
+                            Upload a resume and analyze it to see the score.
+
+                        </div>
+
+                    )}
+
+                </div>
+
+                <div className="right-section">
+
+                    <div className="upload-card">
+
+                        <h2>
+
+                            📄 Upload Resume
+
+                        </h2>
+
+                     <label className="upload-area">
+
+                         <FaCloudUploadAlt className="upload-icon" />
+
+                         <h3>Drag & Drop Resume</h3>
+
+                         <p>or click to browse</p>
+
+                         <small>PDF files only</small>
+
+                         <input
+                             type="file"
+                             accept=".pdf"
+                             onChange={(e) => {
+                                 setResumeFile(e.target.files[0]);
+                                 setFileName(e.target.files[0]?.name || "");
+                             }}
+                             hidden
+                         />
+
+                     </label>
+
+                        <button
+
+                            onClick={uploadResume}
+
+                        >
+
+                            Upload Resume
+
+                        </button>
+
+                        {fileName && (
+
+                            <div className="resume-status">
+
+                                <h3>
+
+                                    📄 {fileName}
+
+                                </h3>
+
+                                <p className="success">
+
+                                    ✅ Ready for Analysis
+
+                                </p>
+
+                            </div>
+
+                        )}
+
+                        <textarea
+
+                            style={{ display: "none" }}
+
+                            value={resume}
+
+                            onChange={(e) =>
+
+                                setResume(e.target.value)
+
+                            }
+
+                        />
+
+                        <h3>
+
+                            Job Description
+
+                        </h3>
+
+                        <textarea
+
+                            placeholder="Paste Job Description Here..."
+
+                            value={job}
+
+                            onChange={(e) =>
+
+                                setJob(e.target.value)
+
+                            }
+
+                        />
+
+                        <button
+
+                            onClick={analyze}
+
+                            disabled={loading}
+
+                        >
+
+                            {loading
+
+                                ? "Analyzing..."
+
+                                : "🚀 Analyze Resume"}
+
+                        </button>
+
+                        {error && (
+
+                            <p className="error">
+
+                                {error}
+
+                            </p>
+
+                        )}
+
+                    </div>
+
+                </div>
+
             </div>
+            {result && (
+            <div className="stats">
 
-            <div>
-              <h3>Missing Skills</h3>
+                <div className="stat-box">
+                    <h3>{result.score}%</h3>
+                    <p>ATS Score</p>
+                </div>
 
-              <ul>
-                {result.missingSkills.map((skill, index) => (
-                  <li key={index} className="bad">
-                    {skill}
-                  </li>
-                ))}
-              </ul>
+                <div className="stat-box">
+                    <h3>{result.matchedSkills.length}</h3>
+                    <p>Matched</p>
+                </div>
+
+                <div className="stat-box">
+                    <h3>{result.missingSkills.length}</h3>
+                    <p>Missing</p>
+                </div>
+
             </div>
+            )}
+                    {result && (
 
-          </div>
-        </div>
-      )}
-    </div>
-  );
+                        <div className="result-section">
+
+                            <div className="skill-card">
+
+                                <h2>✅ Matched Skills</h2>
+
+                                <ul>
+
+                                    {result.matchedSkills.map((skill, index) => (
+
+                                        <li
+                                            key={index}
+                                            className="good"
+                                        >
+
+                                            {skill}
+
+                                        </li>
+
+                                    ))}
+
+                                </ul>
+
+                            </div>
+
+                            <div className="skill-card">
+
+                                <h2>❌ Missing Skills</h2>
+
+                                <ul>
+
+                                    {result.missingSkills.map((skill, index) => (
+
+                                        <li
+                                            key={index}
+                                            className="bad"
+                                        >
+
+                                            {skill}
+
+                                        </li>
+
+                                    ))}
+
+                                </ul>
+
+                            </div>
+
+                             <div className="skill-card">
+
+                                 <h2>🤖 AI Recommendations</h2>
+
+                                 {result.missingSkills.length > 0 ? (
+
+                                     <>
+                                         <ul className="suggestion-list">
+
+                                             {result.missingSkills.map((skill, index) => (
+
+                                                 <li key={index}>
+
+                                                     <span className="tick">✔</span>
+
+                                                     Learn <strong>{skill.toUpperCase()}</strong>
+
+                                                 </li>
+
+                                             ))}
+
+                                             <li>
+                                                 <span className="tick">✔</span>
+                                                 Add projects using these skills.
+                                             </li>
+
+                                             <li>
+                                                 <span className="tick">✔</span>
+                                                 Mention certifications if available.
+                                             </li>
+
+                                             <li>
+                                                 <span className="tick">✔</span>
+                                                 Include measurable achievements in your resume.
+                                             </li>
+
+                                         </ul>
+
+                                         <div className="improvement-box">
+
+                                             <h3>📈 Estimated Improvement</h3>
+
+                                             <strong>
+                                                 {result.score}% → {Math.min(result.score + 10, 100)}%
+                                             </strong>
+
+                                         </div>
+
+                                     </>
+
+                                 ) : (
+
+                                     <div className="perfect-match">
+
+                                         🎉 Excellent!
+
+                                         <br />
+
+                                         Your resume already covers all required skills.
+
+                                     </div>
+
+                                 )}
+
+                             </div>
+
+                        </div>
+
+                    )}
+
+                </div>
+
+    );
+
 }
 
 export default ResumeAnalyzer;
